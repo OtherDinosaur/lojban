@@ -1,0 +1,1 @@
+# O lexer inicial usa apenas a biblioteca padrão do Python.
