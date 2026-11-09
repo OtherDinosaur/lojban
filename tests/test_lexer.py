@@ -77,7 +77,7 @@ class LexerTests(unittest.TestCase):
 
     def test_mixed_indentation(self):
         with self.assertRaises(LexerError):
-            Lexer("brivla x\n \tx1 y").tokenize()
+            Lexer("brivla x\n    x1 y\n\tx2 z").tokenize()
 
     def test_inconsistent_dedent(self):
         with self.assertRaises(LexerError):
@@ -86,10 +86,11 @@ class LexerTests(unittest.TestCase):
     def test_lojban_digits_separated_by_space(self):
         tokens = Lexer("li ci pi pa").tokenize()
         self.assertEqual(tokens[1].type, TokenType.NUMBER)
-        self.assertEqual(tokens[1].value, 3)
-        self.assertEqual(tokens[2].type, TokenType.PI)
-        self.assertEqual(tokens[3].type, TokenType.NUMBER)
-        self.assertEqual(tokens[3].value, 1)
+        self.assertEqual(tokens[1].value, 3.1)
+        self.assertEqual(
+            [token.type for token in tokens[2:]],
+            [TokenType.NEWLINE, TokenType.EOF],
+        )
 
     def test_isolated_pi_raises_error(self):
         with self.assertRaises(LexerError):

@@ -50,8 +50,8 @@ Aumento de nível produz INDENT.
 Redução produz um ou mais DEDENT.
 Redução para um nível inexistente é erro.
 
-Tabs devem ser tratados de forma consistente; a implementação inicial
-recomenda rejeitar mistura de tabs e espaços na indentação.
+O arquivo deve usar apenas espaços ou apenas tabs na indentação. Mistura
+dentro da mesma linha ou entre linhas é erro. Tabs contam como quatro colunas.
 
 ## Comentários
 
@@ -69,12 +69,14 @@ A implementação inicial aceita:
 - inteiros em algarismos;
 - ponto flutuante decimal em algarismos;
 - numerais Lojban básicos;
-- combinação `NUMERAL pi NUMERAL` como número decimal.
+- combinação `NUMERAL pi NUMERAL` como um único token `NUMBER` decimal.
+- somente dígitos Lojban de 0 a 9; `dau` e dígitos maiores ficam fora do
+  subconjunto decimal da versão 0.1.
 
 A conversão de numerais Lojban deve ficar isolada em uma função para poder
 ser expandida sem alterar o lexer principal.
 
 ## Observação
 
-A gramática numérica de `pi` ainda será refinada no parser. O lexer inicial
-mantém o tratamento simples e testável.
+`pi` só é aceito entre dois numerais na mesma linha e não é emitido como token
+isolado. A forma espaçada e a forma sem espaços representam um único número.

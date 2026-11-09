@@ -30,7 +30,6 @@ KEYWORDS: dict[str, TokenType] = {
     "su'i": TokenType.SU_I,
     "vu'u": TokenType.VU_U,
     "pi'i": TokenType.PI_I,
-    "pi": TokenType.PI,
     "fe'i": TokenType.FE_I,
     "zmadu": TokenType.ZMADU,
     "mleca": TokenType.MLECA,
@@ -54,7 +53,6 @@ LOJBAN_DIGITS = {
     "ze": 7,
     "bi": 8,
     "so": 9,
-    "dau": 10,
 }
 
 
@@ -119,6 +117,7 @@ class Lexer:
         self.lines = self.source.split("\n")
         self.indents = [0]
         self.tokens: list[Token] = []
+        self.indent_style: str | None = None
 
     def tokenize(self) -> list[Token]:
         for line_no, raw_line in enumerate(self.lines, start=1):
@@ -141,6 +140,17 @@ class Lexer:
                 f"mistura de tabs e espaços na indentação "
                 f"(linha {line_no}, coluna 1)"
             )
+
+        if indent_text:
+            style = "tabs" if "\t" in indent_text else "spaces"
+            if self.indent_style is None:
+                self.indent_style = style
+            elif style != self.indent_style:
+                raise LexerError(
+                    f"estilo de indentação inconsistente; use apenas "
+                    f"{'tabs' if self.indent_style == 'tabs' else 'espaços'} "
+                    f"(linha {line_no}, coluna 1)"
+                )
 
         indent = self._indent_width(indent_text)
         current = self.indents[-1]
@@ -207,30 +217,56 @@ class Lexer:
 
             word, i = self._scan_word(text, i, line_no, start_column)
             if word == "pi":
-                has_prev_num = (
-                    len(self.tokens) > 0 and self.tokens[-1].type == TokenType.NUMBER
+                raise LexerError(
+                    f"'pi' precisa estar entre numerais na mesma linha "
+                    f"(linha {line_no}, coluna {start_column + i - len(word)})"
                 )
-                next_idx = i
-                while next_idx < len(text) and text[next_idx] in " \t":
-                    next_idx += 1
-                has_next_num = False
-                if next_idx < len(text) and text[next_idx] not in ".#":
-                    next_end = next_idx
-                    while next_end < len(text) and not text[next_end].isspace() and text[next_end] not in ".#":
-                        next_end += 1
-                    next_word = text[next_idx:next_end]
-                    has_next_num = (
-                        parse_lojban_number(next_word) is not None or
-                        ASCII_NUMBER_RE.match(next_word) is not None
-                    )
-                if not has_prev_num or not has_next_num:
-                    raise LexerError(
-                        f"ponto decimal 'pi' isolado (linha {line_no}, coluna {start_column + i - len(word)})"
-                    )
+
+            lojban_value = parse_lojban_number(word)
+            if lojban_value is not None and "pi" not in word:
+                spaced_decimal = self._scan_spaced_decimal(
+                    text, i, line_no, start_column, word
+                )
+                if spaced_decimal is not None:
+                    token, i = spaced_decimal
+                    self.tokens.append(token)
+                    continue
 
             self.tokens.append(
                 self._classify_word(word, line_no, start_column + i - len(word))
             )
+
+    def _scan_spaced_decimal(self, text, end, line_no, start_column, integer_word):
+        """Combine NUMERAL pi NUMERAL into one NUMBER token."""
+        pi_start = end
+        while pi_start < len(text) and text[pi_start] in " \t":
+            pi_start += 1
+        if pi_start == end or text[pi_start:pi_start + 2] != "pi":
+            return None
+        pi_end = pi_start + 2
+        if pi_end < len(text) and not (text[pi_end].isspace() or text[pi_end] in ".#"):
+            return None
+
+        frac_start = pi_end
+        while frac_start < len(text) and text[frac_start] in " \t":
+            frac_start += 1
+        if frac_start == pi_end or frac_start >= len(text) or text[frac_start] in ".#":
+            return None
+        frac_end = frac_start
+        while frac_end < len(text) and not text[frac_end].isspace() and text[frac_end] not in ".#":
+            frac_end += 1
+        fraction_word = text[frac_start:frac_end]
+
+        integer_value = parse_lojban_number(integer_word)
+        fraction_value = parse_lojban_number(fraction_word)
+        if integer_value is None or fraction_value is None or "pi" in fraction_word:
+            return None
+        fraction_digits = len(fraction_word) // 2
+        value = integer_value + fraction_value / (10 ** fraction_digits)
+        return (
+            Token(TokenType.NUMBER, value, line_no, start_column + end - len(integer_word)),
+            frac_end,
+        )
 
     def _scan_string(self, text, i, line_no, start_column):
         content_start = i + 2

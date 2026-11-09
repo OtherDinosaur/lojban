@@ -26,7 +26,6 @@ class TokenType(Enum):
     SU_I = auto()
     VU_U = auto()
     PI_I = auto()
-    PI = auto()
     FE_I = auto()
     ZMADU = auto()
     MLECA = auto()

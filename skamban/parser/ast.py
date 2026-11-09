@@ -86,7 +86,7 @@ class BinaryOp(ASTNode):
       - vu'u (-)
       - pi'i (*)
       - fe'i (/)
-      - du (= / ==)
+      - dunli (==)
       - zmadu (>)
       - mleca (<)
       - zmadu du (>=)

@@ -6,8 +6,8 @@ Protótipo inicial do lexer da linguagem Skamban.
 
 Versão de trabalho: 0.1 (lexer).
 
-O projeto implementa apenas a etapa lexical. Parser, AST, análise semântica,
-motor de inferência e runtime ainda serão desenvolvidos.
+O projeto implementa o lexer e as estruturas iniciais da AST. O parser,
+análise semântica, motor de inferência e runtime ainda serão desenvolvidos.
 
 ## Requisitos
 
@@ -27,9 +27,8 @@ python -m skamban.lexer.lexer examples/basico.ban
 
 ## Próximas etapas
 
-1. estabilizar o lexer;
-2. especificar e implementar o parser;
-3. criar a AST;
-4. implementar tabela de símbolos/análise semântica;
-5. implementar inferência;
-6. implementar runtime.
+1. estabilizar a gramática da versão 0.1 e o lexer;
+2. especificar e implementar o parser usando a AST existente;
+3. implementar tabela de símbolos/análise semântica;
+4. implementar inferência;
+5. implementar runtime.
