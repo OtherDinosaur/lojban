@@ -4,6 +4,9 @@
 
 O lexer transforma caracteres do arquivo `.ban` em tokens.
 
+A sintaxe e as combinações válidas desses tokens estão definidas em
+[GRAMMAR.md](GRAMMAR.md); este documento descreve apenas as regras lexicais.
+
 Ele NÃO deve:
 
 - resolver nomes;
@@ -69,7 +72,8 @@ A implementação inicial aceita:
 - inteiros em algarismos;
 - ponto flutuante decimal em algarismos;
 - numerais Lojban básicos;
-- combinação `NUMERAL pi NUMERAL` como um único token `NUMBER` decimal.
+- combinação de numerais Lojban `NUMERAL pi NUMERAL` como um único token
+  `NUMBER` decimal;
 - somente dígitos Lojban de 0 a 9; `dau` e dígitos maiores ficam fora do
   subconjunto decimal da versão 0.1.
 

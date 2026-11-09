@@ -70,16 +70,12 @@ def parse_lojban_number(word: str) -> float | int | None:
         idx = 0
         digits = []
         while idx < len(s):
-            if s.startswith("dau", idx):
-                digits.append(10)
-                idx += 3
+            d = s[idx:idx+2]
+            if d in LOJBAN_DIGITS:
+                digits.append(LOJBAN_DIGITS[d])
+                idx += 2
             else:
-                d = s[idx:idx+2]
-                if d in LOJBAN_DIGITS:
-                    digits.append(LOJBAN_DIGITS[d])
-                    idx += 2
-                else:
-                    return None
+                return None
         return digits
 
     int_digits = parse_seq(parts[0])

@@ -9,6 +9,7 @@ from skamban.parser.ast import (
     GroupedExpr,
     BinaryOp,
     UnaryOp,
+    Assignment,
     PredicateCall,
     PredicateDef,
     QueryStatement,
@@ -16,6 +17,7 @@ from skamban.parser.ast import (
     ImportStatement,
     Program,
 )
+from skamban.parser.parser import ParseError, Parser, parse
 
 __all__ = [
     "ASTNode",
@@ -28,10 +30,14 @@ __all__ = [
     "GroupedExpr",
     "BinaryOp",
     "UnaryOp",
+    "Assignment",
     "PredicateCall",
     "PredicateDef",
     "QueryStatement",
     "Conditional",
     "ImportStatement",
     "Program",
+    "ParseError",
+    "Parser",
+    "parse",
 ]

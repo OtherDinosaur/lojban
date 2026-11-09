@@ -106,6 +106,13 @@ class UnaryOp(ASTNode):
     operand: ASTNode = field(default_factory=ASTNode)
 
 
+@dataclass
+class Assignment(ASTNode):
+    """Atribuição declarativa introduzida por 'du'."""
+    target: ASTNode = field(default_factory=ASTNode)
+    value: ASTNode = field(default_factory=ASTNode)
+
+
 # ==============================================================================
 # Declarações, Relações e Consultas
 # ==============================================================================

@@ -9,6 +9,10 @@ executável.
 
 Extensão dos arquivos: `.ban`.
 
+A sintaxe normativa da versão 0.1 está em [GRAMMAR.md](GRAMMAR.md). Este
+documento registra os objetivos e as decisões semânticas gerais; divergências
+de sintaxe devem ser resolvidas atualizando primeiro a gramática.
+
 ## Princípios
 
 - Predicados são a unidade fundamental da linguagem.

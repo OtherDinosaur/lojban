@@ -1,0 +1,4 @@
+# Esperado: ParseError; x2 deve ser declarado antes de x3.
+brivla falha
+    x1 resultado
+    x3 argumento

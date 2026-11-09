@@ -1,0 +1,14 @@
+# Precedência: pi'i antes de su'i, associação à esquerda.
+li precedencia. du li pa su'i li re pi'i li ci
+li esquerda. du li vo vu'u li re vu'u li pa
+
+# O agrupamento altera a ordem de avaliação.
+li agrupado. du be li pa su'i li re be'o pi'i li ci
+
+# Operadores de comparação em expressões.
+iguais du li pa dunli li pa
+maior du li re zmadu li pa
+menor du li pa mleca li re
+maior_ou_igual du li re zmadu du li pa
+menor_ou_igual du li pa mleca du li re
+resultado du na ietnu
